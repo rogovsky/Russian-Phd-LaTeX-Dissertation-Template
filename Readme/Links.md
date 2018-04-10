@@ -7,7 +7,8 @@
 
 ## Аспирантура и защита
 * [Я аспирант — сайт для аспирантов](http://yaaspirant.ru/)
-* [Изменения в правилах защиты диссертаций от 1 января 2014](http://aakinshin.blogspot.ru/2014/01/government-decree-842.html)
+* [Положение о присуждении ученых степеней (с сайта КонсультантПлюс)](http://www.consultant.ru/document/cons_doc_LAW_152458/)
+* [Положение о совете по защите диссертаций на соискание ученой степени кандидата наук, на соискание ученой степени доктора наук (с сайта КонсультантПлюс)](http://www.consultant.ru/document/cons_doc_LAW_159986/)
 * [russian-post-C5-addr — Стилевой файл, позволяющий оформить конверты формата C5 приближенно к отечественным стандартам](https://github.com/nvoronchev/russian-post-C5-addr)
 
 ## Литература
@@ -58,6 +59,7 @@
 * [Шаблон выпускной работы на Мехмате ЮФУ](https://github.com/MMCS-SFEDU/mmcs_sfedu_thesis)
 * [LaTeX template for Technische Universität München theses](https://github.com/fwalch/tum-thesis-latex)
 * A [LaTeX / XeLaTeX / LuaLaTeX PhD thesis template](https://github.com/kks32/phd-thesis-template) for Cambridge University Engineering Department.
+* [Template for writing a PhD thesis in Markdown](https://github.com/tompollard/phd_thesis_markdown)
 
 ## Подборка ссылок про важность применения систем контроля версий
 * [Why Use a Version Control System?](http://www.git-tower.com/learn/git/ebook/mac/basics/why-use-version-control)
