@@ -1,47 +1,82 @@
-\chapter{Оформление различных элементов} \label{chapt1}
+\chapter{Оформление различных элементов} \label{ch:ch1}
 
-\section{Форматирование текста} \label{sect1_1}
+\section{Форматирование текста} \label{sec:ch1/sec1}
 
 Мы можем сделать \textbf{жирный текст} и \textit{курсив}.
 
-%\newpage
-%============================================================================================================================
-
-\section{Ссылки} \label{sect1_2}
+\section{Ссылки} \label{sec:ch1/sec2}
 Сошлёмся на библиографию.
 Одна ссылка: \cite[с.~54]{Sokolov}\cite[с.~36]{Gaidaenko}.
 Две ссылки: \cite{Sokolov,Gaidaenko}.
-Много ссылок: %\cite[с.~54]{Lermontov,Management,Borozda} % такой «фокус» вызывает biblatex warning относительно опции sortcites, потому что неясно, к какому источнику относится уточнение о страницах, а bibtex об этой проблеме даже не предупреждает
-\cite{Lermontov,Management,Borozda,Marketing,Constitution,FamilyCode,Gost.7.0.53,Razumovski,Lagkueva,Pokrovski,Sirotko,Lukina,Methodology,Encyclopedia,Nasirova,Berestova,Kriger}.
+Много ссылок: %\cite[с.~54]{Lermontov,Management,Borozda} % такой «фокус»
+%вызывает biblatex warning относительно опции sortcites, потому что неясно, к
+%какому источнику относится уточнение о страницах, а bibtex об этой проблеме
+%даже не предупреждает
+\cite{Lermontov, Management, Borozda, Marketing, Constitution, FamilyCode,
+Gost.7.0.53, Razumovski, Lagkueva, Pokrovski, Methodology, Nasirova, Berestova,
+Kriger}%
+\ifnumequal{\value{bibliosel}}{0}{% Примеры для bibtex8
+    \cite{Sirotko, Lukina, Encyclopedia}%
+}{% Примеры для biblatex через движок biber
+    \cite{Sirotko2, Lukina2, Encyclopedia2}%
+}%
+.
 И~ещё немного ссылок:
-\cite{Article,Book,Booklet,Conference,Inbook,Incollection,Manual,Mastersthesis,Misc,Phdthesis,Proceedings,Techreport,Unpublished}.
-\cite{medvedev2006jelektronnye, CEAT:CEAT581, doi:10.1080/01932691.2010.513279,Gosele1999161,Li2007StressAnalysis, Shoji199895,test:eisner-sample,AB_patent_Pomerantz_1968,iofis_patent1960}
+\cite{Article,Book,Booklet,Conference,Inbook,Incollection,Manual,Mastersthesis,
+Misc,Phdthesis,Proceedings,Techreport,Unpublished}
+% Следует обратить внимание, что пробел после запятой внутри \cite{}
+% обрабатывается ожидаемо, а пробел перед запятой, может вызывать проблемы при
+% обработке ссылок.
+\cite{medvedev2006jelektronnye, CEAT:CEAT581, doi:10.1080/01932691.2010.513279,
+Gosele1999161,Li2007StressAnalysis, Shoji199895, test:eisner-sample,
+test:eisner-sample-shorted, AB_patent_Pomerantz_1968, iofis_patent1960}
+\ifnumequal{\value{bibliosel}}{0}{% Примеры для bibtex8
+}{% Примеры для biblatex через движок biber
+    \cite{patent2h, patent3h, patent2}%
+}%
+.
 
-%Попытка реализовать несколько ссылок на конкретные страницы для стандартной реализации:[\citenum{Sokolov}, с.~54; \citenum{Gaidaenko}, с.~36].
-
-%Несколько источников мультицитата (только в biblatex)
-%\cites[vii--x, 5, 7]{Sokolov}[v"--~x, 25, 526]{Gaidaenko} поехали дальше
+\ifnumequal{\value{bibliosel}}{0}{% Примеры для bibtex8
+Попытка реализовать несколько ссылок на конкретные страницы
+для \texttt{bibtex} реализации библиографии:
+[\citenum{Sokolov}, с.~54; \citenum{Gaidaenko}, с.~36].
+}{% Примеры для biblatex через движок biber
+Несколько источников (мультицитата):
+% Тут специально написано по-разному тире, для демонстрации, что
+% применение специальных тире в настоящий момент в biblatex приводит к непоказу
+% "с.".
+\cites[vii--x, 5, 7]{Sokolov}[v"--~x, 25, 526]{Gaidaenko}[vii--x, 5, 7]{Techreport},
+работает только в \texttt{biblatex} реализации библиографии.
+}%
 
 Ссылки на собственные работы:~\cite{vakbib1, confbib1}
 
-Сошлёмся на приложения: Приложение \ref{AppendixA}, Приложение \ref{AppendixB2}.
+Сошлёмся на приложения: Приложение \ref{app:A}, Приложение \ref{app:B2}.
 
 Сошлёмся на формулу: формула \eqref{eq:equation1}.
 
-Сошлёмся на изображение: рисунок \ref{img:knuth}.
+Сошлёмся на изображение: рисунок \ref{fig:knuth}.
 
-%\newpage
-%============================================================================================================================
+Стандартной практикой является добавление к ссылкам префикса, характеризующего тип элемента.
+Это не является строгим требованием, но позволяет лучше ориентироваться в документах большого размера.
+Например, для ссылок на рисунки используется префикс \textit{fig},
+для ссылки на таблицу -- \textit{tab}.
 
-\section{Формулы} \label{sect1_3}
+В таблице \ref{tab:tab_pref} приложения \ref{app:B4} приведён список рекомендуемых
+к использованию стандартных префиксов.
 
-Благодаря пакету \textit{icomma}, \LaTeX~одинаково хорошо воспринимает в качестве десятичного разделителя и запятую ($3,1415$), и точку ($3.1415$).
+\section{Формулы} \label{sec:ch1/sec3}
 
-\subsection{Ненумерованные одиночные формулы} \label{subsect1_3_1}
+Благодаря пакету \textit{icomma}, \LaTeX~одинаково хорошо воспринимает
+в~качестве десятичного разделителя и запятую ($3,1415$), и точку ($3.1415$).
 
-Вот так может выглядеть формула, которую необходимо вставить в строку по тексту: $x \approx \sin x$ при $x \to 0$.
+\subsection{Ненумерованные одиночные формулы} \label{subsec:ch1/sec3/sub1}
 
-А вот так выглядит ненумерованая отдельностоящая формула c подстрочными и надстрочными индексами:
+Вот так может выглядеть формула, которую необходимо вставить в~строку
+по~тексту: $x \approx \sin x$ при $x \to 0$.
+
+А вот так выглядит ненумерованая отдельностоящая формула c подстрочными
+и надстрочными индексами:
 \[
 (x_1+x_2)^2 = x_1^2 + 2 x_1 x_2 + x_2^2
 \]
@@ -55,26 +90,27 @@
 
 В формулах можно использовать греческие буквы:
 \[
-\alpha\beta\gamma\delta\epsilon\varepsilon\zeta\eta\theta\vartheta\iota\kappa\lambda\\mu\nu\xi\pi\varpi\rho\varrho\sigma\varsigma\tau\upsilon\phi\varphi\chi\psi\omega\Gamma\Delta\Theta\Lambda\Xi\Pi\Sigma\Upsilon\Phi\Psi\Omega
+\alpha\beta\gamma\delta\epsilon\varepsilon\zeta\eta\theta\vartheta\iota\kappa%
+\lambda\\mu\nu\xi\pi\varpi\rho\varrho\sigma\varsigma\tau\upsilon\phi\varphi%
+\chi\psi\omega\Gamma\Delta\Theta\Lambda\Xi\Pi\Sigma\Upsilon\Phi\Psi\Omega
 \]
 
-\def\slantfrac#1#2{ \hspace{3pt}\!^{#1}\!\!\hspace{1pt}/
-  \hspace{2pt}\!\!_{#2}\!\hspace{3pt}
-} %Макрос для красивых дробей в строчку (например, 1/2)
-Для красивых дробей (например, в индексах) можно добавить макрос
-\verb+\slantfrac+ и писать $\slantfrac{1}{2}$ вместо $1/2$.
-%\newpage
-%============================================================================================================================
+Для красивых дробей (например, в индексах) в
+\verb+userstyles.tex+ диссертации добавлен макрос
+\verb+\slantfrac+, благодаря которому можно
+писать $\slantfrac{1}{2}$ вместо $1/2$.
 
-\subsection{Ненумерованные многострочные формулы} \label{subsect1_3_2}
+\subsection{Ненумерованные многострочные формулы} \label{subsec:ch1/sec3/sub2}
 
-Вот так можно написать две формулы, не нумеруя их, чтобы знаки равно были строго друг под другом:
+Вот так можно написать две формулы, не нумеруя их, чтобы знаки <<равно>> были
+строго друг под другом:
 \begin{align}
   f_W & =  \min \left( 1, \max \left( 0, \frac{W_{soil} / W_{max}}{W_{crit}} \right)  \right), \nonumber \\
   f_T & =  \min \left( 1, \max \left( 0, \frac{T_s / T_{melt}}{T_{crit}} \right)  \right), \nonumber
 \end{align}
 
-Выровнять систему ещё и по переменной $ x $ можно, используя окружение \verb|alignedat| из пакета \verb|amsmath|. Вот так: 
+Выровнять систему ещё и по переменной $ x $ можно, используя окружение
+\verb|alignedat| из пакета \verb|amsmath|. Вот так:
 \[
     |x| = \left\{
     \begin{alignedat}{2}
@@ -83,7 +119,9 @@
     \end{alignedat}
     \right.
 \]
-Здесь первый амперсанд (в исходном \LaTeX\ описании формулы) означает выравнивание по~левому краю, второй "--- по~$ x $, а~третий "--- по~слову <<если>>. Команда \verb|\quad| делает большой горизонтальный пробел.
+Здесь первый амперсанд (в исходном \LaTeX\ описании формулы) означает
+выравнивание по~левому краю, второй "--- по~$ x $, а~третий "--- по~слову
+<<если>>. Команда \verb|\quad| делает большой горизонтальный пробел.
 
 Ещё вариант:
 \[
@@ -94,8 +132,9 @@
     \end{cases}
 \]
 
-Кроме того, для  нумерованых формул \verb|alignedat|  делает вертикальное
-выравнивание номера формулы по центру формулы. Например,  выравнивание компонент вектора:
+Кроме того, для  нумерованых формул \verb|alignedat| делает вертикальное
+выравнивание номера формулы по центру формулы. Например, выравнивание
+компонент вектора:
 \begin{equation}
  \label{eq:2p3}
  \begin{alignedat}{2}
@@ -139,7 +178,6 @@
 \backslash \mbox{qquad} &\quad f(x) = x^2\qquad +3x\qquad +2
 \end{align*}
 
-
 Можно использовать разные математические алфавиты:
 \begin{align}
 \mathcal{ABCDEFGHIJKLMNOPQRSTUVWXYZ} \nonumber \\
@@ -149,7 +187,7 @@
 
 Посмотрим на систему уравнений на примере аттрактора Лоренца:
 
-\[ 
+\[
 \left\{
   \begin{array}{rl}
     \dot x = & \sigma (y-x) \\
@@ -160,20 +198,17 @@
 \]
 
 А для вёрстки матриц удобно использовать многоточия:
-\[ 
+\[
 \left(
   \begin{array}{ccc}
-  	a_{11} & \ldots & a_{1n} \\
-  	\vdots & \ddots & \vdots \\
-  	a_{n1} & \ldots & a_{nn} \\
+    a_{11} & \ldots & a_{1n} \\
+    \vdots & \ddots & \vdots \\
+    a_{n1} & \ldots & a_{nn} \\
   \end{array}
 \right)
 \]
 
-
-%\newpage
-%============================================================================================================================
-\subsection{Нумерованные формулы} \label{subsect1_3_3}
+\subsection{Нумерованные формулы} \label{subsec:ch1/sec3/sub3}
 
 А вот так пишется нумерованая формула:
 \begin{equation}
@@ -189,13 +224,15 @@
 
 Впоследствии на формулы (\ref{eq:equation1}) и (\ref{eq:equation2}) можно ссылаться.
 
-Сделать так, чтобы номер формулы стоял напротив средней строки, можно, используя окружение \verb|multlined| (пакет \verb|mathtools|) вместо \verb|multline| внутри окружения \verb|equation|. Вот так:
-\begin{equation} % \tag{S} % tag - вписывает свой текст 
+Сделать так, чтобы номер формулы стоял напротив средней строки, можно,
+используя окружение \verb|multlined| (пакет \verb|mathtools|) вместо
+\verb|multline| внутри окружения \verb|equation|. Вот так:
+\begin{equation} % \tag{S} % tag - вписывает свой текст
   \label{eq:equation3}
     \begin{multlined}
-        1+ 2+3+4+5+6+7+\dots + \\ 
-        + 50+51+52+53+54+55+56+57 + \dots + \\ 
-        + 96+97+98+99+100=5050 
+        1+ 2+3+4+5+6+7+\dots + \\
+        + 50+51+52+53+54+55+56+57 + \dots + \\
+        + 96+97+98+99+100=5050
     \end{multlined}
 \end{equation}
 
@@ -203,4 +240,3 @@
 красиво ссылаться сразу на несколько формул
 (\labelcref{eq:equation1,eq:equation3,eq:equation2}), даже перепутав
 порядок ссылок \verb|(\labelcref{eq:equation1,eq:equation3,eq:equation2})|.
-
