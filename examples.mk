@@ -10,89 +10,133 @@ examples-pdflatex-xcharter examples-xelatex-cmu examples-xelatex-msf\
 examples-xelatex-liberation examples-lualatex-cmu examples-lualatex-msf\
 examples-lualatex-liberation examples-presentation
 
-.EXAMPLENAME = $(TYPE)_$(subst -,_,$(subst examples-,,$(TARGET)))$(subst 0,_bibtex,$(subst 1,_biber,$(BIB)))$(subst 0,,$(subst 1,_draft,$(DRF)))
+.DISSEXAMPLENAME = dissertation_$(subst -,_,$(subst examples-,,$(TARGET)))$(subst 0,_bibtex,$(subst 1,_biber,$(BIB)))$(subst 0,,$(subst 1,_draft,$(DRF)))
 
-.PRESEXAMPLENAME = presentation$(BKND)-notes-$(subst 0,off,$(subst 1,separate,$(subst 2,same,$(NOTES))))
+.SYNEXAMPLENAME = synopsis_$(subst -,_,$(subst examples-,,$(TARGET)))$(subst 0,_bibtex,$(subst 1,_biber,$(BIB)))$(subst 0,,$(subst 1,_draft,$(DRF)))$(subst 0,,$(subst 1,_footnote,$(FOOT)))
 
-define basic-example #Canned Recipe
+.PRESEXAMPLENAME = $(subst -,_,presentation$(BKND)$(subst 0,-bibtex,$(subst 1,-biber,$(BIB)))-notes-$(subst 0,off,$(subst 1,separate,$(subst 2,same,$(NOTES)))))
+
+define dissertation-example #Canned Recipe
 	$(foreach DRF,0 1, \
 	$(foreach BIB,0 1, \
-	$(foreach TYPE,dissertation synopsis, \
-	"$(MAKE)" $(TYPE) \
+	"$(MAKE)" dissertation \
 		BACKEND=$(BACKEND) \
 		FONTFAMILY=$(FONTFAMILY) \
 		ALTFONT=$(ALTFONT) \
-		TARGET=$(.EXAMPLENAME) \
+		TARGET=$(.DISSEXAMPLENAME) \
+		DRAFTON=$(DRF) \
+		USEBIBER=$(BIB); \
+	"$(MAKE)" BACKEND=$(BACKEND) TARGET=$(.DISSEXAMPLENAME) \
+		SOURCE=dissertation clean-target; \
+	))
+endef
+
+define synopsis-example #Canned Recipe
+	$(foreach DRF,0 1, \
+	$(eval FOOT:=0) \
+	$(foreach BIB,0 1, \
+	"$(MAKE)" synopsis \
+		BACKEND=$(BACKEND) \
+		FONTFAMILY=$(FONTFAMILY) \
+		ALTFONT=$(ALTFONT) \
+		TARGET=$(.SYNEXAMPLENAME) \
 		DRAFTON=$(DRF) \
 		USEBIBER=$(BIB) \
-		IMGCOMPILE=$(IMGCOMPILE);\
-	) \
-	$(foreach TYPE,dissertation synopsis, \
-	"$(MAKE)" BACKEND=$(BACKEND) TARGET=$(.EXAMPLENAME) \
-		SOURCE=$(TYPE) clean-target;\
+		USEFOOTCITE=$(FOOT); \
+	"$(MAKE)" BACKEND=$(BACKEND) TARGET=$(.SYNEXAMPLENAME) \
+		SOURCE=synopsis clean-target; \
+		) \
+	$(eval FOOT:=1) \
+	$(eval BIB:=1) \
+	"$(MAKE)" synopsis \
+		BACKEND=$(BACKEND) \
+		FONTFAMILY=$(FONTFAMILY) \
+		ALTFONT=$(ALTFONT) \
+		TARGET=$(.SYNEXAMPLENAME) \
+		DRAFTON=$(DRF) \
+		USEBIBER=$(BIB) \
+		USEFOOTCITE=$(FOOT); \
+	"$(MAKE)" BACKEND=$(BACKEND) TARGET=$(.SYNEXAMPLENAME) \
+		SOURCE=synopsis clean-target; \
+	)
+endef
+
+define presentation-example #Canned Recipe
+	$(foreach BKND,-pdf -pdfxe -pdflua, \
+	$(foreach BIB,0 1, \
+	$(foreach NOTES,0 1 2, \
+	"$(MAKE)" presentation \
+		NOTESON=$(NOTES) \
+		USEBIBER=$(BIB) \
+		BACKEND=$(BKND) \
+		TARGET=$(.PRESEXAMPLENAME); \
+	"$(MAKE)" TARGET=$(.PRESEXAMPLENAME) clean-target; \
 	)))
 endef
+
 
 examples-pdflatex-cm: TARGET=$@
 examples-pdflatex-cm: BACKEND=-pdf
 examples-pdflatex-cm: ALTFONT=0
 examples-pdflatex-cm:
-	$(basic-example)
+	$(dissertation-example)
+	$(synopsis-example)
 
 examples-pdflatex-pscyr: TARGET=$@
 examples-pdflatex-pscyr: BACKEND=-pdf
 examples-pdflatex-pscyr: ALTFONT=1
 examples-pdflatex-pscyr:
-	$(basic-example)
+	$(dissertation-example)
+	$(synopsis-example)
 
 examples-pdflatex-xcharter: TARGET=$@
 examples-pdflatex-xcharter: BACKEND=-pdf
 examples-pdflatex-xcharter: ALTFONT=2
 examples-pdflatex-xcharter:
-	$(basic-example)
+	$(dissertation-example)
+	$(synopsis-example)
 
 examples-xelatex-cmu: TARGET=$@
 examples-xelatex-cmu: BACKEND=-pdfxe
 examples-xelatex-cmu: FONTFAMILY=0
 examples-xelatex-cmu:
-	$(basic-example)
+	$(dissertation-example)
+	$(synopsis-example)
 
 examples-xelatex-msf: TARGET=$@
 examples-xelatex-msf: BACKEND=-pdfxe
 examples-xelatex-msf: FONTFAMILY=1
 examples-xelatex-msf:
-	$(basic-example)
+	$(dissertation-example)
+	$(synopsis-example)
 
 examples-xelatex-liberation: TARGET=$@
 examples-xelatex-liberation: BACKEND=-pdfxe
 examples-xelatex-liberation: FONTFAMILY=2
 examples-xelatex-liberation:
-	$(basic-example)
+	$(dissertation-example)
+	$(synopsis-example)
 
 examples-lualatex-cmu: TARGET=$@
 examples-lualatex-cmu: BACKEND=-pdflua
 examples-lualatex-cmu: FONTFAMILY=0
 examples-lualatex-cmu:
-	$(basic-example)
+	$(dissertation-example)
+	$(synopsis-example)
 
 examples-lualatex-msf: TARGET=$@
 examples-lualatex-msf: BACKEND=-pdflua
 examples-lualatex-msf: FONTFAMILY=1
 examples-lualatex-msf:
-	$(basic-example)
+	$(dissertation-example)
+	$(synopsis-example)
 
 examples-lualatex-liberation: TARGET=$@
 examples-lualatex-liberation: BACKEND=-pdflua
 examples-lualatex-liberation: FONTFAMILY=2
 examples-lualatex-liberation:
-	$(basic-example)
+	$(dissertation-example)
+	$(synopsis-example)
 
 examples-presentation:
-	$(foreach BKND,-pdf -pdfxe -pdflua, \
-	$(foreach NOTES,0 1 2, \
-	"$(MAKE)" presentation \
-		NOTESON=$(NOTES) \
-		BACKEND=$(BKND) \
-		TARGET=$(.PRESEXAMPLENAME);\
-	"$(MAKE)" TARGET=$(.PRESEXAMPLENAME) clean-target;\
-	))
+	$(presentation-example)

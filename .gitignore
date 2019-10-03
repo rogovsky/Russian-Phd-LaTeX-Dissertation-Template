@@ -16,9 +16,9 @@
 *.xdv
 *-converted-to.*
 # these rules might exclude image files for figures etc.
-*.ps
-*.eps
-*.pdf
+/*.ps
+/*.eps
+/*.pdf
 
 ## Bibliography auxiliary files (bibtex/biblatex/biber):
 *.bbl
@@ -129,6 +129,7 @@ acs-*.bib
 # Comment the next line if you want to keep your tikz graphics files
 *.tikz
 *-tikzDictionary
+images/cache/**
 
 # listings
 *.lol
@@ -249,6 +250,10 @@ TSWLatexianTemp*
 
 # KBibTeX
 *~[0-9]*
+
+# Vim
+.*.swp
+.*.swo
 
 # auto folder when using emacs and auctex
 ./auto/*

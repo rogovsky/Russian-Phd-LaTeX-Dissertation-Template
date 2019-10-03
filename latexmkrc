@@ -6,6 +6,8 @@ $ALTFONT = $ENV{ALTFONT};
 $ALTFONT //= '';
 $USEBIBER = $ENV{USEBIBER};
 $USEBIBER //= '';
+$USEFOOTCITE = $ENV{USEFOOTCITE};
+$USEFOOTCITE //= '';
 $IMGCOMPILE = $ENV{IMGCOMPILE};
 $IMGCOMPILE //= '';
 $NOTESON = $ENV{NOTESON};
@@ -18,6 +20,8 @@ $REGEXDIRS = $ENV{REGEXDIRS};
 $REGEXDIRS //= '. Dissertation Synopsis Presentation';
 $TIMERON = $ENV{TIMERON};
 $TIMERON //= '0';
+$TIKZFILE = $ENV{TIKZFILE};
+$TIKZFILE //= '';
 
 
 $texargs = '';
@@ -37,16 +41,24 @@ if ($USEBIBER ne '') {
     $texargs = $texargs . '\newcounter{bibliosel}' .
         '\setcounter{bibliosel}' . '{' . $USEBIBER . '}';
 }
+if ($USEFOOTCITE ne '') {
+    $texargs = $texargs . '\newcounter{usefootcite}' .
+        '\setcounter{usefootcite}' . '{' . $USEFOOTCITE . '}';
+}
 if ($IMGCOMPILE ne '') {
     $texargs = $texargs . '\newcounter{imgprecompile}' .
         '\setcounter{imgprecompile}' . '{' . $IMGCOMPILE . '}';
 }
-if ($IMGCOMPILE eq '1') {
+if ($IMGCOMPILE ne '') {
    $LATEXFLAGS = $LATEXFLAGS . ' -shell-escape'
 }
 if ($NOTESON ne '') {
     $texargs = $texargs . '\newcounter{presnotes}' .
         '\setcounter{presnotes}' . '{' . $NOTESON . '}';
+}
+if ($TIKZFILE ne '') {
+    $texargs = $texargs . '\def' . '\tikzfilename' .
+	'{' . $TIKZFILE . '}';
 }
 
 # set options for all *latex
@@ -76,7 +88,7 @@ $recorder = 1;
 $bibtex_use = 2;
 
 # extensions to clean with -c flag
-$clean_ext = '%R.bbl %R.aux %R.lof %R.log %R.lot %R.fls %R.out %R.toc %R.run.xml %R.xdv %R.snm %R.nav';
+$clean_ext = '%R.bbl %R.aux %R.lof %R.log %R.lot %R.fls %R.out %R.toc %R.run.xml %R.xdv %R.snm %R.nav %R.fmt';
 
 # extensions to clean with -C flag
 $clean_full_ext = '%R.bbl %R.aux %R.lof %R.log %R.lot %R.fls %R.out %R.toc %R.run.xml %R.xdv %R.snm %R.nav';
@@ -93,8 +105,7 @@ $remove_dryrun = 0;
                  '*.fls',
                  '*.out',
                  '*.toc',
-                 'mylatexformat.fmt',
-                 'mylatexformat.log');
+                 '*.fmt');
 ## Intermediate documents:
 # these rules might exclude image files for figures etc.
 # *.ps
