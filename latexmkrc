@@ -1,5 +1,9 @@
+# -*- mode: perl; -*-
+
 $DRAFTON = $ENV{DRAFTON};
 $DRAFTON //= '';
+$SHOWMARKUP = $ENV{SHOWMARKUP};
+$SHOWMARKUP //= '';
 $FONTFAMILY = $ENV{FONTFAMILY};
 $FONTFAMILY //= '';
 $ALTFONT = $ENV{ALTFONT};
@@ -8,6 +12,8 @@ $USEBIBER = $ENV{USEBIBER};
 $USEBIBER //= '';
 $USEFOOTCITE = $ENV{USEFOOTCITE};
 $USEFOOTCITE //= '';
+$BIBGROUPED = $ENV{BIBGROUPED};
+$BIBGROUPED //= '';
 $IMGCOMPILE = $ENV{IMGCOMPILE};
 $IMGCOMPILE //= '';
 $NOTESON = $ENV{NOTESON};
@@ -22,12 +28,18 @@ $TIMERON = $ENV{TIMERON};
 $TIMERON //= '0';
 $TIKZFILE = $ENV{TIKZFILE};
 $TIKZFILE //= '';
+$USEDEV = $ENV{USEDEV};
+$USEDEV //= '';
 
 
 $texargs = '';
 if ($DRAFTON ne '') {
     $texargs = $texargs . '\newcounter{draft}' .
         '\setcounter{draft}' . '{' . $DRAFTON . '}';
+}
+if ($SHOWMARKUP ne '') {
+    $texargs = $texargs . '\newcounter{showmarkup}' .
+        '\setcounter{showmarkup}' . '{' . $SHOWMARKUP . '}';
 }
 if ($FONTFAMILY ne '') {
     $texargs = $texargs . '\newcounter{fontfamily}' .
@@ -44,6 +56,10 @@ if ($USEBIBER ne '') {
 if ($USEFOOTCITE ne '') {
     $texargs = $texargs . '\newcounter{usefootcite}' .
         '\setcounter{usefootcite}' . '{' . $USEFOOTCITE . '}';
+}
+if ($BIBGROUPED ne '') {
+    $texargs = $texargs . '\newcounter{bibgrouped}' .
+        '\setcounter{bibgrouped}' . '{' . $BIBGROUPED . '}';
 }
 if ($IMGCOMPILE ne '') {
     $texargs = $texargs . '\newcounter{imgprecompile}' .
@@ -75,11 +91,20 @@ if ( (! defined &set_tex_cmds) || (! defined $pre_tex_code) ) {
     $pre_tex_code = $texargs;
 }
 
+if ($USEDEV ne '') {
+    $pdflatex =~ s/pdflatex/pdflatex-dev/g;
+    $xelatex =~ s/xelatex/xelatex-dev/g;
+    $lualatex =~ s/lualatex/lualatex-dev/g;
+}
+
 $biber = 'biber ' . $BIBERFLAGS . ' %O %S';
 $bibtex = 'bibtex8 -B -c utf8cyrillic.csf %B';
 
 # set to 1 to count CPU time
 $show_time = $TIMERON;
+
+# maximum number of passes
+$max_repeat = 6;
 
 # record access files
 $recorder = 1;
@@ -381,24 +406,27 @@ sub regexp_cleanup {
     }
 }
 
-sub cleanup1 {
-    # Usage: cleanup1( directory, exts_without_period, ... )
-    #
-    # The directory and the root file name are fixed names, so I must escape
-    #   any glob metacharacters in them:
-    my $dir = fix_pattern( shift );
-    my $root_fixed = fix_pattern( $root_filename );
-    foreach (@_) {
-        my $name = /%R/ ? $_ : "%R.$_";
-	$name =~ s/%R/${root_fixed}/;
-	$name = $dir.$name;
-        if ($remove_dryrun == 0) {
-            unlink_or_move( glob( "$name" ) );
-        } else {
-            print "Would be removed: $name\n";
+{
+    no warnings 'redefine';
+    sub cleanup1 {
+        # Usage: cleanup1( directory, exts_without_period, ... )
+        #
+        # The directory and the root file name are fixed names, so I must escape
+        #   any glob metacharacters in them:
+        my $dir = fix_pattern( shift );
+        my $root_fixed = fix_pattern( $root_filename );
+        foreach (@_) {
+            my $name = /%R/ ? $_ : "%R.$_";
+            $name =~ s/%R/${root_fixed}/;
+            $name = $dir.$name;
+            if ($remove_dryrun == 0) {
+                unlink_or_move( glob( "$name" ) );
+            } else {
+                print "Would be removed: $name\n";
+            }
         }
-    }
-    if ($cleanup_mode == 1) {
-        regexp_cleanup();
-    }
-} #END cleanup1
+        if ($cleanup_mode == 1) {
+            regexp_cleanup();
+        }
+    } #END cleanup1
+}

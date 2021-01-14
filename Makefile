@@ -38,10 +38,12 @@ BACKEND ?= -pdfxe
 
 # Do not modify the section below. Edit usercfg.mk instead.
 DRAFTON ?= # 1=on;0=off
+SHOWMARKUP ?= # 1=on;0=off
 FONTFAMILY ?= # 0=CMU;1=MS fonts;2=Liberation fonts
 ALTFONT ?= # 0=Computer Modern;1=pscyr;2=XCharter
 USEBIBER ?= # 0=bibtex8;1=biber
 USEFOOTCITE ?= # 0=no;1=yes
+BIBGROUPED ?= # 0=no;1=yes
 IMGCOMPILE ?= # 1=on;0=off
 NOTESON ?= # 0=off;1=on, separate slide;2=on, same slide
 LATEXFLAGS ?= -halt-on-error -file-line-error
@@ -50,6 +52,7 @@ BIBERFLAGS ?= # --fixinits
 REGEXDIRS ?= . Dissertation Synopsis Presentation # distclean dirs
 TIMERON ?= # show CPU usage
 TIKZFILE ?= # .tikz file for tikz rule
+USEDEV ?= # use development version
 
 # Makefile options
 MAKEFLAGS := -s
@@ -57,10 +60,12 @@ MAKEFLAGS := -s
 .NOTPARALLEL:
 
 export DRAFTON
+export SHOWMARKUP
 export FONTFAMILY
 export ALTFONT
 export USEBIBER
 export USEFOOTCITE
+export BIBGROUPED
 export IMGCOMPILE
 export NOTESON
 export LATEXFLAGS
@@ -68,6 +73,7 @@ export BIBERFLAGS
 export REGEXDIRS
 export TIMERON
 export TIKZFILE
+export USEDEV
 
 ##! компиляция всех файлов
 all: synopsis dissertation presentation
